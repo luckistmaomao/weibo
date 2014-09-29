@@ -27,7 +27,7 @@ def get_words_in_tweets(tweets):
 
 def words_filter(words):
     stop_words_set = set() 
-    with open('../data/stopwords.dic') as f:
+    with open('/home/yu/workspace/project/weibo-food-security-analysis/data/stopwords.dic') as f:
         for word in f:
             stop_words_set.add(word.strip())
     filtered_words = []
