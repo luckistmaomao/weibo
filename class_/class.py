@@ -5,6 +5,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.linear_model import SGDClassifier
+from sklearn import svm
+from sklearn.metrics import confusion_matrix
 import os
 import jieba
 import random
@@ -24,16 +26,13 @@ def test_classifier(classifier,features,labels):
 
         reuslt_labels = labels[test_index]
         count = 0
+        cm = confusion_matrix(reuslt_labels,predict_labels)
+    #    print cm
         for i in range(len(predict_labels)):
             if reuslt_labels[i] == predict_labels[i]:
                 count += 1
 
         tmp = Counter(zip(reuslt_labels,predict_labels))
-#        for i,j in tmp.items():
-#            if i[1] == i[0]:
-#                pass
-#            else:
-#                print i[0],i[1],j
         accuracy = count*1.0/len(predict_labels)
         accuracies.append(accuracy)
         print "Test case %s accuracy is %s" % (len(accuracies),accuracy)
@@ -72,7 +71,10 @@ def main():
 
     nbd = MultinomialNB()
     nbcg = GaussianNB()
-    test_classifier(nbd,tf,labels)
+    #test_classifier(nbd,tf,labels)
+    weights = {'spam':1.0,'positive':10.0,'negative':10.0,'neutral':1.5}
+    clf = svm.LinearSVC(class_weight=weights)
+    test_classifier(clf,tfidf,labels)
     
 if __name__ == "__main__":
     main()
